@@ -1,82 +1,45 @@
-# Lightweight React Template for KAVIA
+# SimpleNotes Monolithic Application
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+This container hosts a monolithic app with:
+- React frontend (in this folder)
+- FastAPI backend (in backend/)
+- PostgreSQL database (configured via environment variables)
+- Auth (register, verify email, login), notes CRUD with attachments, categories/tags, search, bulk ops
+- Privacy settings, integration stubs for email, analytics, backups
 
-## Features
+## Quick start (two terminals)
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+Terminal 1 (backend):
+  cd SimpleNotesApplicationContainer/backend
+  cp .env.example .env  # Set values as needed
+  python -m venv .venv && source .venv/bin/activate
+  pip install -r requirements.txt
+  uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-## Getting Started
+Terminal 2 (frontend):
+  cd SimpleNotesApplicationContainer
+  npm install
+  # Configure API base if different:
+  # export REACT_APP_API_BASE=http://localhost:8000/api/v1
+  npm start
 
-In the project directory, you can run:
+Open http://localhost:3000
 
-### `npm start`
+API docs: http://localhost:8000/docs
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Environment variables
 
-### `npm test`
+- Frontend:
+  - REACT_APP_API_BASE: Base URL for backend API (default http://localhost:8000/api/v1)
 
-Launches the test runner in interactive watch mode.
+- Backend: see backend/.env.example for full list
+  - DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD
+  - SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, etc.
+  - CORS_ORIGINS should include http://localhost:3000 for local dev
+  - EMAIL_* flags for email verification/reset (stubs)
 
-### `npm run build`
+## Notes
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
-```
-
-### Components
-
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
-
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
-
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Attachments are stored locally in backend/uploads/attachments and served at /uploads/*
+- Replace integration stubs with your provider credentials for production
+- For production, add HTTPS, proper cookie security, rate limiting, CSRF, and real migrations
